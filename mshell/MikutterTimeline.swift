@@ -38,6 +38,9 @@ class MikutterTimeline: NSView {
                 }
             }
         }
+        subscription!.status.whenComplete { result in
+            print("finished subscription gui_timeline_add_messages: \(result)")
+        }
     }
     
     required init?(coder: NSCoder) {
