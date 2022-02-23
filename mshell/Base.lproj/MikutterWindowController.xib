@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="MikutterWindowController" customModule="mshell" customModuleProvider="target">
             <connections>
                 <outlet property="paneStack" destination="hJQ-Cl-6Qt" id="wUR-DU-czj"/>
+                <outlet property="statusMessage" destination="YbZ-fI-nbX" id="OWm-5I-KGL"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="elj-Ge-Rnt"/>
             </connections>
         </customObject>
@@ -23,16 +24,31 @@
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <stackView distribution="fillEqually" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hJQ-Cl-6Qt">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="640"/>
+                        <rect key="frame" x="0.0" y="22" width="480" height="618"/>
                     </stackView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YbZ-fI-nbX">
+                        <rect key="frame" x="8" y="0.0" width="464" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="c76-bd-dm7"/>
+                        </constraints>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="できること、超人的。" id="liz-7c-ofl">
+                            <font key="font" metaFont="system" size="11"/>
+                            <color key="textColor" name="windowFrameTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
                     <constraint firstItem="hJQ-Cl-6Qt" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="85p-HD-hhB"/>
+                    <constraint firstAttribute="bottom" secondItem="YbZ-fI-nbX" secondAttribute="bottom" id="DuZ-tn-jFM"/>
                     <constraint firstItem="hJQ-Cl-6Qt" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="KuD-bf-dI1"/>
+                    <constraint firstAttribute="trailing" secondItem="YbZ-fI-nbX" secondAttribute="trailing" constant="10" id="RgE-r5-dqL"/>
                     <constraint firstAttribute="trailing" secondItem="hJQ-Cl-6Qt" secondAttribute="trailing" id="c8K-tz-leS"/>
-                    <constraint firstAttribute="bottom" secondItem="hJQ-Cl-6Qt" secondAttribute="bottom" id="qVI-G8-6VU"/>
+                    <constraint firstItem="YbZ-fI-nbX" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="10" id="onn-BN-8Ay"/>
+                    <constraint firstAttribute="bottom" secondItem="hJQ-Cl-6Qt" secondAttribute="bottom" constant="22" id="qVI-G8-6VU"/>
                 </constraints>
             </view>
+            <contentBorderThickness minY="22"/>
             <point key="canvasLocation" x="139" y="144"/>
         </window>
     </objects>
