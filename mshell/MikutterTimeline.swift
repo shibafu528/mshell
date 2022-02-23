@@ -4,6 +4,7 @@
 
 import Cocoa
 import GRPC
+import PromiseKit
 
 class MikutterTimeline: NSView {
     @IBOutlet weak var tableView: NSTableView!
@@ -18,8 +19,7 @@ class MikutterTimeline: NSView {
         translatesAutoresizingMaskIntoConstraints = false
         loadNib()
         
-        let mrpc = App.mrpc
-        subscription = mrpc.subscribe(.with { $0.name = "gui_timeline_add_messages" }, callOptions: nil) { event in
+        subscription = App.mrpc.subscribe(.with { $0.name = "gui_timeline_add_messages" }, callOptions: nil) { event in
             guard event.param.count == 2 else { return }
             let remoteTimeline = event.param[0].proxy
             let messages = event.param[1].sequence.val
@@ -27,18 +27,14 @@ class MikutterTimeline: NSView {
             guard remoteTimeline == self.remote.proxy() else { return }
             messages.forEach { param in
                 DispatchQueue.global(qos: .utility).async {
-                    let message = param.proxy
-                    do {
-                        // 面倒になってきたから同期処理でやっちゃう
-                        let desc = try mrpc.query(.with { $0.subject = message; $0.selection = "description" }).response.wait()
-                        let user = try mrpc.query(.with { $0.subject = message; $0.selection = "user" }).response.wait()
-                        let idname = try mrpc.query(.with { $0.subject = user.response.proxy; $0.selection = "idname" }).response.wait()
-                        DispatchQueue.main.async {
-                            let msg = "\(idname.response.sval): \(desc.response.sval)"
-                            self.messages.insert(msg, at: 0)
-                            self.tableView.insertRows(at: .init(integer: 0), withAnimation: .slideDown)
-                        }
-                    } catch {}
+                    let message = param.proxy.wrap()
+                    firstly {
+                        when(fulfilled: message.query("description"), message.query("user").then { $0.proxy.wrap().query("idname") })
+                    }.done(on: .main) { (desc, idname) in
+                        let msg = "\(idname.sval): \(desc.sval)"
+                        self.messages.insert(msg, at: 0)
+                        self.tableView.insertRows(at: .init(integer: 0), withAnimation: .slideDown)
+                    }
                 }
             }
         }
