@@ -58,26 +58,7 @@ class MikutterWindowController: NSWindowController {
     }
     
     func join(remotePane: RemoteWidget) {
-        let tabView = NSTabView()
-        paneStack.addArrangedSubview(tabView)
-        
-        remotePane.children.forEach { remoteTab in
-            guard remoteTab.kind == .tab else { return }
-            
-            let tab = NSTabViewItem()
-            tab.view = MikutterTab(remote: remoteTab)
-            tabView.addTabViewItem(tab)
-            
-            let res = App.mrpc.query(.with { $0.subject = remoteTab.proxy(); $0.selection = "name" }, callOptions: defaultTimeoutCallOpt()).response
-            res.whenCompleteBlocking(onto: .main) { result in
-                switch result {
-                case let .success(pv):
-                    tab.label = pv.response.sval
-                case let .failure(error):
-                    print(error)
-                    tab.label = remoteTab.id
-                }
-            }
-        }
+        let pane = MikutterPane(remote: remotePane)
+        paneStack.addArrangedSubview(pane)
     }
 }
